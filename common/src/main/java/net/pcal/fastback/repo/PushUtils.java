@@ -107,6 +107,7 @@ abstract class PushUtils {
             if (conf.getBoolean(IS_NATIVE_GIT_ENABLED)) {
                 ulog.message(styledLocalized("fastback.chat.push-started", NATIVE_GIT, pushUrl));
                 native_doPush(repo, sid.getBranchName(), ulog);
+                native_doPush(repo, "master", ulog);
             } else if (conf.getBoolean(IS_SMART_PUSH_ENABLED)) {
                 ulog.message(styledLocalized("fastback.chat.push-started", NORMAL, pushUrl));
                 final WorldId uuid = repo.getWorldId();
@@ -126,7 +127,7 @@ abstract class PushUtils {
         final File worktree = repo.getWorkTree();
         final GitConfig conf = repo.getConfig();
         String remoteName = conf.getString(REMOTE_NAME);
-        final String[] push = {"git", "-C", worktree.getAbsolutePath(), "-c", "push.autosetupremote=false", "push", "--progress", "--set-upstream", remoteName, branchNameToPush};
+        final String[] push = {"git", "-C", worktree.getAbsolutePath(), "-c", "push.autosetupremote=false", "push", "--force", "--progress", "--set-upstream", remoteName, branchNameToPush};
         final Map<String, String> env = Map.of("GIT_LFS_FORCE_PROGRESS", "1");
         final Consumer<String> outputConsumer = line -> log.update(styledRaw(line, NATIVE_GIT));
         doExec(push, env, outputConsumer, outputConsumer);

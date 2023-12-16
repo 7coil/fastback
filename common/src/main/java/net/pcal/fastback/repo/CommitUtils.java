@@ -139,6 +139,10 @@ abstract class CommitUtils {
                 String[] commit = {"git", "-C", worktree.getAbsolutePath(), "commit", "-m", newBranchName};
                 doExec(commit, env, outputConsumer, outputConsumer);
             }
+            {
+                String[] forceMaster = {"git", "-C", worktree.getAbsolutePath(), "branch", "-f", "master", "HEAD"};
+                doExec(forceMaster, env, outputConsumer, outputConsumer);
+            }
         } catch (ProcessException e) {
             syslog().error(e);
             ulog.message(styledRaw("fastback.chat.commit-failed", ERROR));
